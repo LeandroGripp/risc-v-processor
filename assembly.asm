@@ -1,52 +1,56 @@
 main:
-  addi $a0, $zero, 315 # n = 315;
+  addi a0, zero, 630 # n = 315;
 
-  jal primeFactors
-  j end
+  jal ra, primeFactors
+  jal zero, end #jump incondicional
 
 primeFactors:
-  add $s0, $zero, $a0
-  addi $t0, $zero, 2
+  add s0, zero, a0
+  addi t0, zero, 2
   while:
-    rem $t1, $s0, $t0
-    bne $t1, $zero, doneWhile # n%2==0
+    rem t1, s0, t0
+    bne t1, zero, doneWhile # n%2==0
 
-    # cout << 2 << " ";	 
+    # cout << 2 << " ";
+    addi a7, zero, 1
+    add a0, zero, t0
+    ecall	 
 
-    div $s0, $t0
-    mfhi $s0 # n=n/2
+    div s0, s0, t0 # n=n/2
 
-    j while
+    jal zero, while #jump incondicional
   doneWhile:
-  addi $s1, $zero, 3
+  addi s1, zero, 3
   for:
-    mul $t1, $s1, $s1 # i^2
-    slt $t2, $s0, $t1 # n < i^2 
-    bne $t2, $zero, doneFor #  i^2 <= n
+    mul t1, s1, s1 # i^2
+    blt s0, t1, doneFor # n < i^2
 
     whileInsideFor:
-      rem $t1, $s0, $s1
-      bne $t1, $zero, doneWhileInsideFor # n%i==0
+      rem t1, s0, s1
+      bne t1, zero, doneWhileInsideFor # n%i==0
 
       # cout << i << " ";
-	    div $s0, $s0, $s1 # n=n/i
+      addi a7, zero, 1
+	    add a0, zero, s1
+	    ecall
+
+	    div s0, s0, s1 # n=n/i
       
-      j whileInsideFor
+      jal zero, whileInsideFor
 
     doneWhileInsideFor:
-    addi $s1, $s1, 2
-    j for
+    add s1, s1, t0
+    jal zero, for
   doneFor:
 
   if:
-    slt $t2, $t0, $s0
-    beq $t2, $zero, endPrimeFactors
+    blt s0, t0, endPrimeFactors # n<2
     
-    li $v0, 1										
-	  add $a0, $zero, $s0					
-	  syscall	
+    addi a7, zero, 1
+	  add a0, zero, s0
+	  ecall
 
   endPrimeFactors:
-  jr $ra
+  jalr zero, ra, 0
   
   end:
