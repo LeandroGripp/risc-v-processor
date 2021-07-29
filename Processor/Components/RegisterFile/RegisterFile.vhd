@@ -18,7 +18,7 @@ ARCHITECTURE behavioral OF register_file IS
   TYPE registerFile IS ARRAY(0 TO 31) OF STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL registers : registerFile;
 BEGIN
-  regFile : PROCESS (clk) IS
+  PROCESS (clk) IS
   BEGIN
     IF rising_edge(clk) THEN
       -- Read A and B before bypass

@@ -1,64 +1,64 @@
-LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
-USE ieee.numeric_std.ALL;
-
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE ieee.NUMERIC_STD.ALL;
+-----------------------------------------------
+---------- ALU 32-bit VHDL ---------------------
+-----------------------------------------------
 ENTITY ALU IS
-	PORT (
-		CONTROL : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-		SRC1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-		SRC2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-		RESULT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-		ZERO : OUT STD_LOGIC
-	);
+  PORT (
+    SRC1, SRC2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- 2 inputs 32-bit
+    CONTROL : IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- 1 input 3-bit for selecting function
+    RESULT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); -- 1 output 32-bit 
+    ZERO : OUT STD_LOGIC -- ZERO flag
+  );
 END ALU;
+ARCHITECTURE Behavioral OF ALU IS
 
-ARCHITECTURE arch OF ALU IS
+  SIGNAL ALU_Result : STD_LOGIC_VECTOR (31 DOWNTO 0);
+  SIGNAL ZERO_Result : STD_LOGIC;
+
 BEGIN
-
-	PROCESS (CONTROL) IS
-		VARIABLE aux : STD_LOGIC_VECTOR(63 DOWNTO 0);
-		VARIABLE result_temp : STD_LOGIC_VECTOR(31 DOWNTO 0);
-		VARIABLE zero_temp : STD_LOGIC;
-	BEGIN
-		CASE CONTROL IS
-			WHEN "000" =>
-				result_temp <= STD_LOGIC_VECTOR(signed(SRC1) + signed(SRC2));
-				zero_temp := '0';
-			WHEN "001" =>
-				aux := STD_LOGIC_VECTOR(signed(SRC1) * signed(SRC2));
-				result_temp := aux(63) & aux(30 DOWNTO 0);
-				zero_temp := '0';
-			WHEN "010" =>
-				-- DIVISION;
-			WHEN "011" =>
-				-- REM;
-			WHEN "100" =>
-				result_temp <= "00000000000000000000000000000000";
-				IF (SRC1 = SRC2) THEN
-					zero_temp := '1';
-				ELSE
-					zero_temp := '0';
-				END IF;
-			WHEN "101" =>
-				result_temp <= "00000000000000000000000000000000";
-				IF (SRC1 = SRC2) THEN
-					zero_temp := '0';
-				ELSE
-					zero_temp := '1';
-				END IF;
-			WHEN "110" =>
-				result_temp <= "00000000000000000000000000000000";
-				IF (signed(SRC1) < signed(SRC2)) THEN
-					zero_temp := '1';
-				ELSE
-					zero_temp := '0';
-				END IF;
-			WHEN "111" =>
-				result_temp <= "00000000000000000000000000000000";
-				zero_temp := '0';
-		END CASE;
-		RESULT <= result_temp;
-		ZERO <= zero_temp;
-	END PROCESS;
-
-END arch;
+  PROCESS (SRC1, SRC2, CONTROL)
+  BEGIN
+    CASE(CONTROL) IS
+      WHEN "000" => -- Addition
+      ALU_Result <= SRC1 + SRC2;
+      ZERO_result <= '0';
+      WHEN "001" => -- Multiplication
+      ALU_Result <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(SRC1)) * to_integer(unsigned(SRC2))), 32));
+      ZERO_result <= '0';
+      WHEN "010" => -- Division
+      ALU_Result <= STD_LOGIC_VECTOR(to_unsigned(to_integer(unsigned(SRC1)) / to_integer(unsigned(SRC2)), 32));
+      ZERO_result <= '0';
+      WHEN "011" => -- REM
+      ALU_Result <= STD_LOGIC_VECTOR(to_unsigned(to_integer(unsigned(SRC1)) REM to_integer(unsigned(SRC2)), 32));
+      ZERO_result <= '0';
+      WHEN "100" => -- Equal
+      IF (SRC1 = SRC2) THEN
+        ZERO_result <= '1';
+      ELSE
+        ZERO_result <= '0';
+      END IF;
+      ALU_Result <= "00000000000000000000000000000000";
+      WHEN "101" => -- Not Equal
+      IF (SRC1 = SRC2) THEN
+        ZERO_result <= '0';
+      ELSE
+        ZERO_result <= '1';
+      END IF;
+      ALU_Result <= "00000000000000000000000000000000";
+      WHEN "110" => --  Less than
+      IF (SRC1 < SRC2) THEN
+        ZERO_result <= '1';
+      ELSE
+        ZERO_result <= '0';
+      END IF;
+      ALU_Result <= "00000000000000000000000000000000";
+      WHEN "111" => -- whatever
+      ALU_Result <= "00000000000000000000000000000000";
+      ZERO_result <= '0';
+    END CASE;
+  END PROCESS;
+  RESULT <= ALU_Result;
+  ZERO <= ZERO_result;
+END Behavioral;
