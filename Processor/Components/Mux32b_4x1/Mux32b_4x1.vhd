@@ -8,16 +8,15 @@ ENTITY Mux32b_4x1 IS
         a1: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         a2: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         a3: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-        s0 : IN STD_LOGIC;
-        s1 : IN STD_LOGIC;
+        s : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
         b: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
 END Mux32b_4x1;
 
 ARCHITECTURE comportamental OF Mux32b_4x1 IS 
 BEGIN 
-    b <= a0 when (s0='0' and s1='0') else 
-         a1 when (s0='0' and s1='1') else
-         a2 when (s0='1' and s1='0') else 
-         a3 when (s0='1' and s1='1');
+    b <= a0 when (s="00") else 
+         a1 when (s="01") else
+         a2 when (s="10") else 
+         a3 when (s="11");
 END comportamental;
