@@ -18,15 +18,12 @@ ENTITY Controller IS
     ImmSelect: OUR STD_LOGIC_VECTOR(1 DOWNTO 0)
     ALUCtr: OUR STD_LOGIC_VECTOR(2 DOWNTO 0)
 	);
-END ALU;
+END Controller;
 
-ARCHITECTURE arch OF ALU IS
+ARCHITECTURE arch OF COntroller IS
 BEGIN
 
 	PROCESS (opcode, funct7, funct3) IS
-		-- VARIABLE aux : STD_LOGIC_VECTOR(63 DOWNTO 0);
-		-- VARIABLE result_temp : STD_LOGIC_VECTOR(31 DOWNTO 0);
-		-- VARIABLE zero_temp : STD_LOGIC;
 	BEGIN
 		CASE opcode IS
 			WHEN "0110011" => -- Tipo R
