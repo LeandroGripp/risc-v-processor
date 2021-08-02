@@ -184,10 +184,10 @@ BEGIN
   PORT MAP(input => ImmB, output => ImmB32b);
 
   -- ADDERS
-  PCIncrementer : 
+  PCIncrementer :
   Adder_32b PORT MAP(x => PC, y => x"00000004", s => PCPlus4);
 
-  AddressGenerator : 
+  AddressGenerator :
   Adder_32b PORT MAP(x => ExtendedImmediate, y => BaseAddress, s => JumpAddress);
 
   -- MULTIPLEXADORES
@@ -221,5 +221,9 @@ BEGIN
   ImmB <= Instruction(31) & Instruction(7) & Instruction(30 DOWNTO 25) & Instruction(11 DOWNTO 8) & "0";
 
   NextPCSource <= ((Branch AND shouldBranch) OR Jump);
+
+  opcode <= Instruction(6 DOWNTO 0);
+  funct7 <= Instruction(31 DOWNTO 25);
+  funct3 <= Instruction(14 DOWNTO 12);
 
 END Behaviour;
