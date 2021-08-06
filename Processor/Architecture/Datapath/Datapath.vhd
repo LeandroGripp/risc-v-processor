@@ -14,7 +14,7 @@ ENTITY Datapath IS
     WReg : IN STD_LOGIC;
     BaseAdd : IN STD_LOGIC;
     ALUSrc : IN STD_LOGIC;
-    ImmSelect : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+    ImmSelect : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     ALUCtr : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
 
     opcode : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
@@ -67,14 +67,18 @@ ARCHITECTURE Behaviour OF Datapath IS
     );
   END COMPONENT;
 
-  COMPONENT Mux32b_4x1 IS
+  COMPONENT Mux32b_8x1 IS
     PORT (
-      a0 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      a1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      a2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      a3 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      s : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
-      b : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+      a0: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a1: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a2: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a3: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a4: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a5: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a6: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a7: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      s : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      b: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
   END COMPONENT;
 
@@ -127,11 +131,13 @@ ARCHITECTURE Behaviour OF Datapath IS
   SIGNAL ImmJ : STD_LOGIC_VECTOR(20 DOWNTO 0);
   SIGNAL ImmS : STD_LOGIC_VECTOR(11 DOWNTO 0);
   SIGNAL ImmB : STD_LOGIC_VECTOR(12 DOWNTO 0);
+  SIGNAL ImmU : STD_LOGIC_VECTOR(19 DOWNTO 0);
 
   SIGNAL ImmI32b : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL ImmJ32b : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL ImmS32b : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL ImmB32b : STD_LOGIC_VECTOR(31 DOWNTO 0);
+  SIGNAL ImmU32b : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
   SIGNAL ExtendedImmediate : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
@@ -207,9 +213,9 @@ BEGIN
   Mux32b_2x1 PORT MAP(a0 => WD3Data1, a1 => PCPlus4, s => Jump, b => WD3Data2);
 
   ImmediateSelector :
-  Mux32b_4x1 PORT MAP(a0 => ImmI32b, a1 => ImmJ32b, a2 => ImmS32b, a3 => ImmB32b, s => ImmSelect, b => ExtendedImmediate);
+  Mux32b_8x1 PORT MAP(a0 => ImmI32b, a1 => ImmJ32b, a2 => ImmS32b, a3 => ImmB32b, a4 => ImmU32b, a5 => x"00000000", a6 => x"00000000", a7 => x"00000000", s => ImmSelect, b => ExtendedImmediate);
 
-  -- UPDATE DE SINAIS DEPENDENTES
+  UPDATE DE SINAIS DEPENDENTES
 
   RS1 <= Instruction(19 DOWNTO 15);
   RS2 <= Instruction(24 DOWNTO 20);
@@ -219,6 +225,9 @@ BEGIN
   ImmJ <= Instruction(31) & Instruction(19 DOWNTO 12) & Instruction(20) & Instruction(30 DOWNTO 21) & "0";
   ImmS <= Instruction(31 DOWNTO 25) & Instruction(11 DOWNTO 7);
   ImmB <= Instruction(31) & Instruction(7) & Instruction(30 DOWNTO 25) & Instruction(11 DOWNTO 8) & "0";
+  ImmU <= Instruction(31 downto 12);
+
+  ImmU32b <= ImmU & x"000"; -- The extension of the U signal is given by the addition of 12 zeroes to the rights.
 
   NextPCSource <= ((Branch AND shouldBranch) OR Jump);
 
