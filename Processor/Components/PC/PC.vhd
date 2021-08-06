@@ -1,7 +1,7 @@
 LIBRARY IEEE;
 USE ieee.std_logic_1164.ALL;
 
-ENTITY Register32b IS
+ENTITY PC IS
     PORT (
         clock : IN STD_LOGIC;
         ld : IN STD_LOGIC;
@@ -9,15 +9,15 @@ ENTITY Register32b IS
         D : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         Q : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
-END Register32b;
+END PC;
 
-ARCHITECTURE RTL OF Register32b IS
+ARCHITECTURE RTL OF PC IS
 BEGIN
     PROCESS (clock)
     BEGIN
         IF (rising_edge(clock)) THEN
             IF (reset = '1') THEN
-                Q <= "00000000000000000000000000000000";
+                Q <= x"00400000";
             ELSE
                 IF (ld = '1') THEN
                     Q <= D;

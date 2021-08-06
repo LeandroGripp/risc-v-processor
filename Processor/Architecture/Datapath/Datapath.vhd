@@ -19,7 +19,10 @@ ENTITY Datapath IS
 
     opcode : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
     funct7 : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
-    funct3 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
+    funct3 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+
+    datapathInput : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+    datapathOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
 END Datapath;
 
@@ -47,7 +50,10 @@ ARCHITECTURE Behaviour OF Datapath IS
       WE : IN STD_LOGIC;
       WD : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       A : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      RD : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+      RD : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+
+      dataInput: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      dataOutput: IN STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
   END COMPONENT;
 
@@ -82,7 +88,7 @@ ARCHITECTURE Behaviour OF Datapath IS
     );
   END COMPONENT;
 
-  COMPONENT Register32b IS
+  COMPONENT PC IS
     PORT (
       clock : IN STD_LOGIC;
       ld : IN STD_LOGIC;
@@ -158,7 +164,7 @@ ARCHITECTURE Behaviour OF Datapath IS
 BEGIN
   -- ELEMENTOS CENTRAIS
   ProgramCounter :
-  Register32b PORT MAP(clock => clk, ld => '1', reset => reset, D => NextPC, Q => PC);
+  PC PORT MAP(clock => clk, ld => '1', reset => reset, D => NextPC, Q => PC);
 
   InstructionMemoryInstance :
   InstructionMemory PORT MAP(A => PC, RD => Instruction);
@@ -167,7 +173,7 @@ BEGIN
   register_file PORT MAP(clk => clk, A1 => RS1, A2 => RS2, A3 => RD, WD3 => WD3Data2, writeEnable => WReg, RD1 => Reg1, RD2 => Reg2);
 
   DataMemoryInstance :
-  DataMemory PORT MAP(clk => clk, WE => WMemData, WD => Reg2, A => ALURes, RD => DataFromMemory);
+  DataMemory PORT MAP(clk => clk, WE => WMemData, WD => Reg2, A => ALURes, RD => DataFromMemory, dataInput => datapathInput, dataOutput => datapathOutput);
 
   ALUInstance :
   ALU PORT MAP(SRC1 => Reg1, SRC2 => ALUSourceSignal, CONTROL => AluCtr, RESULT => ALURes, ZERO => shouldBranch);

@@ -16,8 +16,6 @@ main:
   #lw a0, 0x100100f8 
   lui a0, 0x00010010
   lw a0, 0x000000f8(a0)
-  
-  addi a0, zero, 630 # n = 315;
 
   jal ra, primeFactors
   jal zero, end #jump incondicional
