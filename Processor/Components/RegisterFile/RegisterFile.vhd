@@ -24,8 +24,17 @@ BEGIN
       -- Read A and B before bypass
       RD1 <= registers(to_integer(unsigned(A1)));
       RD2 <= registers(to_integer(unsigned(A2)));
+
+      -- When required register is $0
+      IF to_integer(unsigned(A1)) = 0 THEN 
+        RD1 <= x"00000000";
+      END IF;
+      IF to_integer(unsigned(A2)) = 0 THEN 
+        RD2 <= x"00000000";
+      END IF;
+
       -- Write and bypass
-      IF writeEnable = '1' THEN
+      IF writeEnable = '1' AND to_integer(unsigned(A3)) /= 0 THEN
         registers(to_integer(unsigned(A3))) <= WD3; -- Write
       END IF;
     END IF;
