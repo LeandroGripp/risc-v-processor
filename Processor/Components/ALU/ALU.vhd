@@ -54,8 +54,8 @@ BEGIN
         ZERO_result <= '0';
       END IF;
       ALU_Result <= "00000000000000000000000000000000";
-      WHEN "111" => -- whatever
-      ALU_Result <= "00000000000000000000000000000000";
+      WHEN "111" => -- devolve SRC2
+      ALU_Result <= SRC2;
       ZERO_result <= '0';
     END CASE;
   END PROCESS;

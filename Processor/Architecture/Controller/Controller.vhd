@@ -15,7 +15,7 @@ ENTITY Controller IS
 		WReg : OUT STD_LOGIC;
 		BaseAdd : OUT STD_LOGIC;
 		ALUSrc : OUT STD_LOGIC;
-    ImmSelect: OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+    ImmSelect: OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
     ALUCtr: OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
 	);
 END Controller;
@@ -87,7 +87,7 @@ BEGIN
         Jump <= '1';
         WMemData <= '0';
         WReg <= '1';
-        ImmSelect <= "01";
+        ImmSelect <= "001";
         BaseAdd <= '1';
       
 			WHEN "1100111" => -- jalr
@@ -95,7 +95,7 @@ BEGIN
         Jump <= '1';
         WMemData <= '0';
         WReg <= '1';
-        ImmSelect <= "00";
+        ImmSelect <= "000";
         BaseAdd <= '0';
       
 			WHEN "0100011" => -- sw
@@ -104,7 +104,7 @@ BEGIN
         WDSrc <= '0';
         WMemData <= '1';
         WReg <= '0';
-        ImmSelect <= "10";
+        ImmSelect <= "010";
         AluSrc <= '1';
         AluCtr <= "000";
       
@@ -114,9 +114,29 @@ BEGIN
         WDSrc <= '1';
         WMemData <= '0';
         WReg <= '1';
-        ImmSelect <= "00";
+        ImmSelect <= "000";
         AluSrc <= '1';
         AluCtr <= "000";
+
+      WHEN "0010011" => -- addi
+        Branch <= '0';
+        Jump <= '0';
+        WDSrc <= '0';
+        WMemData <= '0';
+        WReg <= '1';
+        ImmSelect <= "000";
+        AluSrc <= '1';
+        AluCtr <= "000";
+
+      WHEN "0110111" => -- lui
+        Branch <= '0';
+        Jump <= '0';
+        WDSrc <= '0';
+        WMemData <= '0';
+        WReg <= '1';
+        ImmSelect <= "100";
+        AluSrc <= '1';
+        AluCtr <= "111";
       
 			WHEN "1100011" => -- Tipo B
         CASE funct3 IS
@@ -125,7 +145,7 @@ BEGIN
             Jump <= '0';
             WMemData <= '0';
             WReg <= '0';
-            ImmSelect <= "11";
+            ImmSelect <= "011";
             BaseAdd <= '1';
             AluSrc <= '0';
             AluCtr <= "100";
@@ -135,7 +155,7 @@ BEGIN
             Jump <= '0';
             WMemData <= '0';
             WReg <= '0';
-            ImmSelect <= "11";
+            ImmSelect <= "011";
             BaseAdd <= '1';
             AluSrc <= '0';
             AluCtr <= "101";
@@ -145,7 +165,7 @@ BEGIN
             Jump <= '0';
             WMemData <= '0';
             WReg <= '0';
-            ImmSelect <= "11";
+            ImmSelect <= "011";
             BaseAdd <= '1';
             AluSrc <= '0';
             AluCtr <= "110";
