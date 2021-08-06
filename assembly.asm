@@ -1,4 +1,22 @@
+# A primeira instrução ficará armazenada no endereço 0x00400000
+# Variáveis globais
+  # O endereço definido para a entrada de dados será 0x100100f8
+  # O endereço definido para a saída de dados será 0x100100fc 
+  # (considera-se que o sistema se ocupa de capturar a saída e o endereço é reaproveitado)
+# Na função main, o valor de n é lido do endereço de input e então alocado em a0, 
+# que será passado como parâmetro
+# Na função primeFactors, n está em s0
+# t0 é a constante 2 - isso é necessário porque não há implementação de multiplicação,
+# divisão e resto com imediatos em RISC V.
+# Em s1 estoca-se os números ímpares que serão usados para teste dos fatores primos
+# Em t1, estocamos o valor corrente ao quadrado, para compará-lo com n
+# Ao longo de todo o programa, escrevemos no endereço de saída os fatores primos
+
 main:
+  #lw a0, 0x100100f8 
+  lui a0, 0x00010010
+  lw a0, 0x000000f8(a0)
+  
   addi a0, zero, 630 # n = 315;
 
   jal ra, primeFactors
@@ -12,9 +30,8 @@ primeFactors:
     bne t1, zero, doneWhile # n%2==0
 
     # cout << 2 << " ";
-    addi a7, zero, 1
-    add a0, zero, t0
-    ecall	 
+    lui t3, 0x00010010
+    sw, t0, 0x000000fc(t3) 
 
     div s0, s0, t0 # n=n/2
 
@@ -30,11 +47,10 @@ primeFactors:
       bne t1, zero, doneWhileInsideFor # n%i==0
 
       # cout << i << " ";
-      addi a7, zero, 1
-	    add a0, zero, s1
-	    ecall
+      lui t3, 0x00010010
+      sw s1, 0x000000fc(t3)
 
-	    div s0, s0, s1 # n=n/i
+      div s0, s0, s1 # n=n/i
       
       jal zero, whileInsideFor
 
@@ -46,9 +62,8 @@ primeFactors:
   if:
     blt s0, t0, endPrimeFactors # n<2
     
-    addi a7, zero, 1
-	  add a0, zero, s0
-	  ecall
+    lui t3, 0x00010010
+    sw, s0, 0x000000fc(t3)
 
   endPrimeFactors:
   jalr zero, ra, 0
