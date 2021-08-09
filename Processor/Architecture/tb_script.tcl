@@ -1,4 +1,5 @@
-#do tb_script.tcl
+# use this command in ModelSim (Altera) to simulate: 
+# do tb_script.tcl
 
 if {[file exists work]} {
 vdel -lib work -all

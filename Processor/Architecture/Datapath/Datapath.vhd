@@ -2,6 +2,9 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
+-- The datapath, connecting all the components, maps the wires inside the processor
+-- More info about the connections can be found in the project documentation, such as the schematic
+
 ENTITY Datapath IS
   PORT (
 
@@ -22,11 +25,7 @@ ENTITY Datapath IS
     funct3 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
 
     datapathInput : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-    datapathOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-
-    PC_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-    INSTRUCTION_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-    A_DataPath : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    datapathOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
 END Datapath;
 
@@ -56,8 +55,8 @@ ARCHITECTURE Behaviour OF Datapath IS
       A : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       RD : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 
-      dataInput: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      dataOutput: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+      dataInput : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      dataOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
   END COMPONENT;
 
@@ -79,16 +78,16 @@ ARCHITECTURE Behaviour OF Datapath IS
 
   COMPONENT Mux32b_8x1 IS
     PORT (
-      a0: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      a1: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      a2: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      a3: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      a4: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      a5: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      a6: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      a7: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a0 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a3 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a4 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a5 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a6 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      a7 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       s : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-      b: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+      b : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
   END COMPONENT;
 
@@ -235,7 +234,7 @@ BEGIN
   ImmJ <= Instruction(31) & Instruction(19 DOWNTO 12) & Instruction(20) & Instruction(30 DOWNTO 21) & "0";
   ImmS <= Instruction(31 DOWNTO 25) & Instruction(11 DOWNTO 7);
   ImmB <= Instruction(31) & Instruction(7) & Instruction(30 DOWNTO 25) & Instruction(11 DOWNTO 8) & "0";
-  ImmU <= Instruction(31 downto 12);
+  ImmU <= Instruction(31 DOWNTO 12);
 
   ImmU32b <= ImmU & x"000"; -- The extension of the U signal is given by the addition of 12 zeroes to the rights.
 
@@ -244,10 +243,5 @@ BEGIN
   opcode <= Instruction(6 DOWNTO 0);
   funct7 <= Instruction(31 DOWNTO 25);
   funct3 <= Instruction(14 DOWNTO 12);
-
-
-  PC_OUT <= PC;
-  INSTRUCTION_OUT <= INSTRUCTION;
-  A_DataPath <= ALURes;
 
 END Behaviour;

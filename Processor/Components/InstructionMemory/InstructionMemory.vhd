@@ -5,7 +5,9 @@ USE ieee.numeric_std.ALL;
 -- Instruction Memory, where it is stored the program in machine language
 -- Built as a simple ROM memory
 -- Instructions were translated from assembly code using riscV specifications
--- Instructions are stored during initialization, as we were not supposed to build a path for it to be stored
+-- Instructions are stored during initialization, as we were not supposed to build a path for it to be 
+-- stored
+-- When our specific program reaches it's end (index 23), IntructionMemory outputs noOp forever
 
 ENTITY InstructionMemory IS
   PORT (
