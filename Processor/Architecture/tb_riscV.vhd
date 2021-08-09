@@ -38,9 +38,9 @@ instancia_counter: riscV port map(
     A_DataPath_Out=>sig_A_DataPath_Out
 );
 
-    sig_reset <= '1','0' after 21 ns;
+    sig_reset <= '1','0' after 210 ns;
     sig_systemInput <= x"00000276"; --630
-    sig_clk <= not sig_clk after 10 ns;
+    sig_clk <= not sig_clk after 100 ns;
     
 end teste;
 

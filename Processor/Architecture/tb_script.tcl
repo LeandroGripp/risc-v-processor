@@ -25,5 +25,5 @@ add wave sim:/tb_riscV/*
 view wave
 view structure
 view signals
-run 1100ns
+run 11000ns
 #quit -force

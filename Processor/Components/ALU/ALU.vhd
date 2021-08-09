@@ -1,4 +1,4 @@
-library ieee;
+LIBRARY ieee;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 USE ieee.NUMERIC_STD.ALL;
@@ -21,6 +21,10 @@ ARCHITECTURE Behavioral OF ALU IS
 BEGIN
   PROCESS (SRC1, SRC2, CONTROL)
   BEGIN
+    REPORT
+      "ALUSrc1=" & INTEGER'image(to_integer(unsigned(SRC1))) & " " &
+      "ALUSrc2=" & INTEGER'image(to_integer(unsigned(SRC2))) & " "
+      SEVERITY note;
     CASE(CONTROL) IS
       WHEN "000" => -- Addition
       ALU_Result <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(SRC1)) + to_integer(unsigned(SRC2))), 32));
@@ -29,11 +33,19 @@ BEGIN
       ALU_Result <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(SRC1)) * to_integer(unsigned(SRC2))), 32));
       ZERO_result <= '0';
       WHEN "010" => -- Division
-      ALU_Result <= STD_LOGIC_VECTOR(to_unsigned(to_integer(unsigned(SRC1)) / to_integer(unsigned(SRC2)), 32));
+      IF to_integer(unsigned(SRC2)) = 0 THEN
+        ALU_Result <= SRC1;
+      ELSE
+        ALU_Result <= STD_LOGIC_VECTOR(to_unsigned(to_integer(unsigned(SRC1)) / to_integer(unsigned(SRC2)), 32));
+      END IF;
       ZERO_result <= '0';
       WHEN "011" => -- REM
+      IF to_integer(unsigned(SRC2)) = 0 THEN
+        ALU_Result <= SRC1;
+      ELSE
         ALU_Result <= STD_LOGIC_VECTOR(to_unsigned(to_integer(unsigned(SRC1)) REM to_integer(unsigned(SRC2)), 32));
-        ZERO_result <= '0';
+      END IF;
+      ZERO_result <= '0';
       WHEN "100" => -- Equal
       IF (SRC1 = SRC2) THEN
         ZERO_result <= '1';
@@ -55,7 +67,7 @@ BEGIN
         ZERO_result <= '0';
       END IF;
       ALU_Result <= "00000000000000000000000000000000";
-      WHEN others => -- devolve SRC2
+      WHEN OTHERS => -- devolve SRC2
       ALU_Result <= SRC2;
       ZERO_result <= '0';
     END CASE;

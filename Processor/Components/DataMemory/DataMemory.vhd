@@ -21,26 +21,35 @@ ARCHITECTURE behavioral OF DataMemory IS
 
   CONSTANT baseAddress : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"10010000";
   
-BEGIN
-  PROCESS (clk) IS
+BEGIN 
+  PROCESS(A) IS -- Process for reading from DataMemory
     VARIABLE memIndex : INTEGER;
   BEGIN
-    IF rising_edge(clk) THEN
+    memIndex := to_integer((unsigned(A) - unsigned(baseAddress)) / 4);
+    if (memIndex > 63) then  -- when memIndex is out of range. Happens when A is garbage
+      memIndex := 0;
+    end if;
+    RD <= ram(memIndex);
+  END PROCESS;
+
+  PROCESS (clk) IS -- Process for writing to DataMemory
+    VARIABLE memIndex : INTEGER;
+  BEGIN
+    IF falling_edge(clk) THEN
       ram(62) <= dataInput;
       memIndex := to_integer((unsigned(A) - unsigned(baseAddress)) / 4);
+      -- report 
+      --   "memIndex=" & integer'image(memIndex) &
+      --   " WE=" & std_logic'image(WE) &
+      --   " WD=" & integer'image(to_integer(unsigned(WD)))
+      -- severity note;
       IF (WE = '1') THEN -- When we want to write to the DataMemory
-        ram(memIndex) <= WD;
-
-        IF (memIndex = 63) THEN -- Exposing the output to the outside world
-          dataOutput <= ram(memIndex);
-        ELSE
-          dataOutput <= x"00000000";
-        END IF; 
-      ELSE -- When we want to read from the DataMemory
-        if (memIndex > 63) then  -- when memIndex is out of range. Happens when A is garbage
-          memIndex := 0;
-        end if;
-        RD <= ram(memIndex);
+        ram(memIndex) <= WD; 
+      END IF;
+      IF (memIndex = 63 and WE = '1') THEN -- Exposing the output to the outside world
+        dataOutput <= WD;
+      ELSE
+        dataOutput <= x"00000000";
       END IF;
     END IF;
   END PROCESS;
