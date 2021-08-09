@@ -53,7 +53,7 @@ ARCHITECTURE Behaviour OF Datapath IS
       RD : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 
       dataInput: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      dataOutput: IN STD_LOGIC_VECTOR(31 DOWNTO 0)
+      dataOutput: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
   END COMPONENT;
 
@@ -88,7 +88,7 @@ ARCHITECTURE Behaviour OF Datapath IS
     );
   END COMPONENT;
 
-  COMPONENT PC IS
+  COMPONENT PC_REGISTER IS
     PORT (
       clock : IN STD_LOGIC;
       ld : IN STD_LOGIC;
@@ -164,7 +164,7 @@ ARCHITECTURE Behaviour OF Datapath IS
 BEGIN
   -- ELEMENTOS CENTRAIS
   ProgramCounter :
-  PC PORT MAP(clock => clk, ld => '1', reset => reset, D => NextPC, Q => PC);
+  PC_REGISTER PORT MAP(clock => clk, ld => '1', reset => reset, D => NextPC, Q => PC);
 
   InstructionMemoryInstance :
   InstructionMemory PORT MAP(A => PC, RD => Instruction);
@@ -221,7 +221,7 @@ BEGIN
   ImmediateSelector :
   Mux32b_8x1 PORT MAP(a0 => ImmI32b, a1 => ImmJ32b, a2 => ImmS32b, a3 => ImmB32b, a4 => ImmU32b, a5 => x"00000000", a6 => x"00000000", a7 => x"00000000", s => ImmSelect, b => ExtendedImmediate);
 
-  UPDATE DE SINAIS DEPENDENTES
+  --UPDATE DE SINAIS DEPENDENTES
 
   RS1 <= Instruction(19 DOWNTO 15);
   RS2 <= Instruction(24 DOWNTO 20);

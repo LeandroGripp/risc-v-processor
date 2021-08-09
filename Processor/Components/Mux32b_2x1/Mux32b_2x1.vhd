@@ -14,5 +14,5 @@ END Mux32b_2x1;
 ARCHITECTURE comportamental OF Mux32b_2x1 IS 
 BEGIN 
     b <= a0 when (s='0') else 
-         a1 when (s='1');
+         a1;
 END comportamental;

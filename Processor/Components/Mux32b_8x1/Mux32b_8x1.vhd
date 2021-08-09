@@ -26,5 +26,5 @@ BEGIN
          a4 when (s="100") else
          a5 when (s="101") else
          a6 when (s="110") else
-         a7 when (s="111");
+         a7;
 END comportamental;

@@ -11,7 +11,7 @@ ENTITY DataMemory IS
     RD : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
     
     dataInput: IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-    dataOutput: IN STD_LOGIC_VECTOR(31 DOWNTO 0)
+    dataOutput: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
 END DataMemory;
 
@@ -25,8 +25,8 @@ BEGIN
   PROCESS (clk) IS
     VARIABLE memIndex : INTEGER RANGE 0 TO 63;
   BEGIN
-  ram(62) <= dataInput;
   IF rising_edge(clk) THEN
+		ram(62) <= dataInput;
       memIndex := to_integer((unsigned(A) - unsigned(baseAddress)) / 4);
       IF (WE = '1') THEN -- When we want to write to the DataMemory
         ram(memIndex) <= WD;

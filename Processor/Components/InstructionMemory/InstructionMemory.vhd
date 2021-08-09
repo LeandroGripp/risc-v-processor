@@ -44,9 +44,14 @@ ARCHITECTURE behavioral OF InstructionMemory IS
   CONSTANT baseAddress : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00400000";
 
 begin
-  process(A) is
+  process(A, ram) is
     variable memIndex : INTEGER range 0 to 26;
   begin
     memIndex := to_integer((unsigned(A) - unsigned(baseAddress)) / 4);
-    RD <= ram(memIndex);
+    if (memIndex<=26) then
+      RD <= ram(memIndex);
+    else
+      RD <= x"00000000";
+    end if;
+  end process;
 END behavioral;

@@ -56,8 +56,6 @@ COMPONENT Controller IS
 	);
 END COMPONENT;
 
-SIGNAL sig_datapathInput : STD_LOGIC_VECTOR(31 DOWNTO 0);
-SIGNAL sig_datapathOutput : STD_LOGIC_VECTOR(31 DOWNTO 0);
 SIGNAL sig_opcode : STD_LOGIC_VECTOR(6 DOWNTO 0);
 SIGNAL sig_funct7 : STD_LOGIC_VECTOR(6 DOWNTO 0);
 SIGNAL sig_funct3 : STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -88,8 +86,8 @@ Datapath PORT MAP(
   opcode => sig_opcode,
   funct7 => sig_funct7,
   funct3 => sig_funct3,
-  datapathInput => sig_datapathInput,
-  datapathOutput => sig_datapathOutput
+  datapathInput => systemInput,
+  datapathOutput => systemOutput
 );
 
 ControllerInstance:

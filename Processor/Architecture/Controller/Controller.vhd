@@ -25,6 +25,18 @@ BEGIN
 
 	PROCESS (opcode, funct7, funct3) IS
 	BEGIN
+
+    --Setting signals at first to prevent latches
+    Branch <= '0';
+    Jump <= '0';
+    WMemData <= '0';
+    WReg <= '0';
+    AluSrc <= '0';
+    AluCtr <= "000";
+    ImmSelect <= "000";
+    WDSrc <= '0';
+    BaseAdd <= '0';
+
 		CASE opcode IS
 			WHEN "0110011" => -- Tipo R
 				CASE funct7 IS
