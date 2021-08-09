@@ -22,7 +22,11 @@ ENTITY Datapath IS
     funct3 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
 
     datapathInput : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-    datapathOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    datapathOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+
+    PC_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    INSTRUCTION_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    A_DataPath : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
 END Datapath;
 
@@ -240,5 +244,10 @@ BEGIN
   opcode <= Instruction(6 DOWNTO 0);
   funct7 <= Instruction(31 DOWNTO 25);
   funct3 <= Instruction(14 DOWNTO 12);
+
+
+  PC_OUT <= PC;
+  INSTRUCTION_OUT <= INSTRUCTION;
+  A_DataPath <= ALURes;
 
 END Behaviour;

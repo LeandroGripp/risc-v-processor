@@ -17,7 +17,7 @@ BEGIN
     BEGIN
         IF (rising_edge(clock)) THEN
             IF (reset = '1') THEN
-                Q <= x"00400000";
+                Q <= x"003FFFFC";
             ELSE
                 IF (ld = '1') THEN
                     Q <= D;

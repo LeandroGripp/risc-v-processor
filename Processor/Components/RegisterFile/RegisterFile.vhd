@@ -21,6 +21,12 @@ BEGIN
   PROCESS (clk) IS
   BEGIN
     IF rising_edge(clk) THEN
+      report 
+        "a0=" & integer'image(to_integer(unsigned(registers(10)))) & " " &
+        "s0=" & integer'image(to_integer(unsigned(registers(8)))) & " " &
+        "t0=" & integer'image(to_integer(unsigned(registers(5))))
+      severity note;
+
       -- Read A and B before bypass
       RD1 <= registers(to_integer(unsigned(A1)));
       RD2 <= registers(to_integer(unsigned(A2)));

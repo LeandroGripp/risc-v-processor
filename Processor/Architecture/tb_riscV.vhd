@@ -12,7 +12,10 @@ port (
     reset: IN STD_LOGIC;
 
     systemInput : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-    systemOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    systemOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    PC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    INSTRUCTION : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    A_DataPath_Out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 );
 end component;
 
@@ -20,18 +23,25 @@ signal sig_clk: STD_LOGIC:= '0';
 signal sig_reset: STD_LOGIC;
 signal sig_systemInput: STD_LOGIC_VECTOR(31 DOWNTO 0);
 signal sig_systemOutput: STD_LOGIC_VECTOR(31 DOWNTO 0);
+signal sig_PC: STD_LOGIC_VECTOR(31 DOWNTO 0);
+signal sig_INSTRUCTION: STD_LOGIC_VECTOR(31 DOWNTO 0);
+signal sig_A_DataPath_Out : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
 begin
 instancia_counter: riscV port map(
     clk => sig_clk,
     reset => sig_reset,
     systemInput => sig_systemInput,
-    systemOutput => sig_systemOutput
+    systemOutput => sig_systemOutput,
+    PC => sig_PC,
+    INSTRUCTION => sig_INSTRUCTION,
+    A_DataPath_Out=>sig_A_DataPath_Out
 );
 
     sig_reset <= '1','0' after 21 ns;
     sig_systemInput <= x"00000276"; --630
     sig_clk <= not sig_clk after 10 ns;
+    
 end teste;
 
 --Expected output: 2 3 3 5 7

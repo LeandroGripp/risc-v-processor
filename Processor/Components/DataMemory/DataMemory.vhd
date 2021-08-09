@@ -23,10 +23,10 @@ ARCHITECTURE behavioral OF DataMemory IS
   
 BEGIN
   PROCESS (clk) IS
-    VARIABLE memIndex : INTEGER RANGE 0 TO 63;
+    VARIABLE memIndex : INTEGER;
   BEGIN
-  IF rising_edge(clk) THEN
-		ram(62) <= dataInput;
+    IF rising_edge(clk) THEN
+      ram(62) <= dataInput;
       memIndex := to_integer((unsigned(A) - unsigned(baseAddress)) / 4);
       IF (WE = '1') THEN -- When we want to write to the DataMemory
         ram(memIndex) <= WD;
@@ -37,9 +37,11 @@ BEGIN
           dataOutput <= x"00000000";
         END IF; 
       ELSE -- When we want to read from the DataMemory
+        if (memIndex > 63) then  -- when memIndex is out of range. Happens when A is garbage
+          memIndex := 0;
+        end if;
         RD <= ram(memIndex);
       END IF;
-
     END IF;
   END PROCESS;
 END behavioral;

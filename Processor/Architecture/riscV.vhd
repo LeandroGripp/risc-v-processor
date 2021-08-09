@@ -8,7 +8,11 @@ ENTITY riscV IS
     reset: IN STD_LOGIC;
 
     systemInput : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-    systemOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    systemOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+
+    PC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    INSTRUCTION : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    A_DataPath_Out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
 END riscV;
 
@@ -34,7 +38,11 @@ COMPONENT Datapath IS
     funct3 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
 
     datapathInput : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-    datapathOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    datapathOutput : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+
+    PC_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    INSTRUCTION_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    A_DataPath : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
 END COMPONENT;
 
@@ -87,7 +95,11 @@ Datapath PORT MAP(
   funct7 => sig_funct7,
   funct3 => sig_funct3,
   datapathInput => systemInput,
-  datapathOutput => systemOutput
+  datapathOutput => systemOutput,
+
+  PC_OUT => PC,
+  INSTRUCTION_OUT => INSTRUCTION,
+  A_DataPath => A_DataPath_Out
 );
 
 ControllerInstance:

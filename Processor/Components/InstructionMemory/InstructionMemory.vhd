@@ -45,7 +45,7 @@ ARCHITECTURE behavioral OF InstructionMemory IS
 
 begin
   process(A, ram) is
-    variable memIndex : INTEGER range 0 to 26;
+    variable memIndex : INTEGER;
   begin
     memIndex := to_integer((unsigned(A) - unsigned(baseAddress)) / 4);
     if (memIndex<=26) then

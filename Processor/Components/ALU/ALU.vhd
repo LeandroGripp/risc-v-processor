@@ -23,7 +23,7 @@ BEGIN
   BEGIN
     CASE(CONTROL) IS
       WHEN "000" => -- Addition
-      ALU_Result <= SRC1 + SRC2;
+      ALU_Result <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(SRC1)) + to_integer(unsigned(SRC2))), 32));
       ZERO_result <= '0';
       WHEN "001" => -- Multiplication
       ALU_Result <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(SRC1)) * to_integer(unsigned(SRC2))), 32));
@@ -32,8 +32,8 @@ BEGIN
       ALU_Result <= STD_LOGIC_VECTOR(to_unsigned(to_integer(unsigned(SRC1)) / to_integer(unsigned(SRC2)), 32));
       ZERO_result <= '0';
       WHEN "011" => -- REM
-      ALU_Result <= STD_LOGIC_VECTOR(to_unsigned(to_integer(unsigned(SRC1)) REM to_integer(unsigned(SRC2)), 32));
-      ZERO_result <= '0';
+        ALU_Result <= STD_LOGIC_VECTOR(to_unsigned(to_integer(unsigned(SRC1)) REM to_integer(unsigned(SRC2)), 32));
+        ZERO_result <= '0';
       WHEN "100" => -- Equal
       IF (SRC1 = SRC2) THEN
         ZERO_result <= '1';
@@ -55,7 +55,7 @@ BEGIN
         ZERO_result <= '0';
       END IF;
       ALU_Result <= "00000000000000000000000000000000";
-      WHEN "111" => -- devolve SRC2
+      WHEN others => -- devolve SRC2
       ALU_Result <= SRC2;
       ZERO_result <= '0';
     END CASE;
