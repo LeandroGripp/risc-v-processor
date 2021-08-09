@@ -2,15 +2,17 @@ LIBRARY ieee;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 USE ieee.NUMERIC_STD.ALL;
------------------------------------------------
----------- ALU 32-bit VHDL ---------------------
------------------------------------------------
+
+-- 32bit ALU, with arithmetic and comparisons opperations
+-- Result output is for arithmetic, ZERO is for comparisons
+-- Suports addition, multiplication, division, remainder, less than, equal, not equal
+
 ENTITY ALU IS
   PORT (
     SRC1, SRC2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- 2 inputs 32-bit
     CONTROL : IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- 1 input 3-bit for selecting function
     RESULT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); -- 1 output 32-bit 
-    ZERO : OUT STD_LOGIC -- ZERO flag
+    ZERO : OUT STD_LOGIC -- Comparison flag
   );
 END ALU;
 ARCHITECTURE Behavioral OF ALU IS
@@ -21,10 +23,6 @@ ARCHITECTURE Behavioral OF ALU IS
 BEGIN
   PROCESS (SRC1, SRC2, CONTROL)
   BEGIN
-    REPORT
-      "ALUSrc1=" & INTEGER'image(to_integer(unsigned(SRC1))) & " " &
-      "ALUSrc2=" & INTEGER'image(to_integer(unsigned(SRC2))) & " "
-      SEVERITY note;
     CASE(CONTROL) IS
       WHEN "000" => -- Addition
       ALU_Result <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(SRC1)) + to_integer(unsigned(SRC2))), 32));
@@ -67,7 +65,7 @@ BEGIN
         ZERO_result <= '0';
       END IF;
       ALU_Result <= "00000000000000000000000000000000";
-      WHEN OTHERS => -- devolve SRC2
+      WHEN OTHERS => -- just lets SRC2 through
       ALU_Result <= SRC2;
       ZERO_result <= '0';
     END CASE;

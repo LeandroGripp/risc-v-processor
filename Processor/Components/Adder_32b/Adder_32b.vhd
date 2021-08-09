@@ -2,6 +2,8 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.std_logic_unsigned.ALL;
 
+-- Simple 32b adder
+
 ENTITY Adder_32b IS
     PORT (
         x, y : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -9,7 +11,7 @@ ENTITY Adder_32b IS
     );
 END Adder_32b;
 
-ARCHITECTURE comportamental OF Adder_32b IS 
-BEGIN 
+ARCHITECTURE comportamental OF Adder_32b IS
+BEGIN
     s <= x + y;
 END comportamental;

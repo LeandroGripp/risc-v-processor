@@ -1,6 +1,10 @@
 LIBRARY IEEE;
 USE ieee.std_logic_1164.ALL;
 
+-- Modified 32b register used as Program Counter
+-- Adress of first program intruction is 0x00400000, as specified in riscV memory organization
+-- Resets to 0x003FFFFC and will be incremmented right away
+
 ENTITY PC_REGISTER IS
     PORT (
         clock : IN STD_LOGIC;
@@ -17,7 +21,7 @@ BEGIN
     BEGIN
         IF (rising_edge(clock)) THEN
             IF (reset = '1') THEN
-                Q <= x"003FFFFC";
+                Q <= x"003FFFFC"; --Adress of first program intruction is 0x00400000
             ELSE
                 IF (ld = '1') THEN
                     Q <= D;

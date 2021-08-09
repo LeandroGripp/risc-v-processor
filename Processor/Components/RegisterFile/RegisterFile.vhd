@@ -2,6 +2,12 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
+-- Register File, which contains 32 registers of 32bits
+-- Inputs initiated with A specify the adress (2 read, 1 write)
+-- Does not depend of the clock while reading a register and can read 2 registers simultaneously
+-- Writes in the falling edge (writeEnable needs to be TRUE as well)
+-- Has a ZERO refference register, which can not ve overwritten
+
 ENTITY register_file IS
   PORT (
     clk : IN STD_LOGIC;
@@ -19,29 +25,24 @@ ARCHITECTURE behavioral OF register_file IS
   SIGNAL registers : registerFile;
 BEGIN
   PROCESS (A1, A2) IS
-  BEGIN 
-    -- Read A and B before bypass
+  BEGIN
+    -- Read A and B
     RD1 <= registers(to_integer(unsigned(A1)));
     RD2 <= registers(to_integer(unsigned(A2)));
 
-    -- When required register is $0
-    IF to_integer(unsigned(A1)) = 0 THEN 
+    -- Zero Refference
+    IF to_integer(unsigned(A1)) = 0 THEN
       RD1 <= x"00000000";
     END IF;
-    IF to_integer(unsigned(A2)) = 0 THEN 
+    IF to_integer(unsigned(A2)) = 0 THEN
       RD2 <= x"00000000";
     END IF;
+
   END PROCESS;
   PROCESS (clk) IS
   BEGIN
     IF falling_edge(clk) THEN
-      report 
-        "a0=" & integer'image(to_integer(unsigned(registers(10)))) & " " &
-        "s0=" & integer'image(to_integer(unsigned(registers(8)))) & " " &
-        "t0=" & integer'image(to_integer(unsigned(registers(5))))
-      severity note;
-      -- Write and bypass
-      IF writeEnable = '1' AND to_integer(unsigned(A3)) /= 0 THEN
+      IF writeEnable = '1' AND to_integer(unsigned(A3)) /= 0 THEN --can not write in ZERO register
         registers(to_integer(unsigned(A3))) <= WD3; -- Write
       END IF;
     END IF;
