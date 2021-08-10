@@ -18,7 +18,7 @@ USE ieee.numeric_std.ALL;
 
 -- We defined address 63 for system output, and there is a direct wire connected to it as output
 -- Anytime there is data beeing writen on it from the processor, this data is exported as system output
--- When there is nothing beeing writen on it during any given clock cicle, the output is 0
+-- When there is nothing beeing writen on it during any given clock cicle, the output is undefined
 
 ENTITY DataMemory IS
   PORT (
@@ -62,7 +62,7 @@ BEGIN
       IF (memIndex = 63 AND WE = '1') THEN -- Exposing the output to the outside world
         dataOutput <= WD;
       ELSE
-        dataOutput <= x"00000000"; -- when nothing is beeing writen in system output
+        dataOutput <= "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; -- when nothing is beeing writen in system output
       END IF;
     END IF;
   END PROCESS;

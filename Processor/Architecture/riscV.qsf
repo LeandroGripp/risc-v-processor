@@ -49,7 +49,11 @@ set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name VHDL_FILE tb_riscV.vhd
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name VHDL_FILE tb726_riscV.vhd
+set_global_assignment -name VHDL_FILE tb630_riscV.vhd
 set_global_assignment -name VHDL_FILE ../Components/PC_REGISTER/PC_REGISTER.vhd
 set_global_assignment -name VHDL_FILE ../Components/SigExt/SigExt.vhd
 set_global_assignment -name VHDL_FILE ../Components/RegisterFile/RegisterFile.vhd
@@ -62,6 +66,3 @@ set_global_assignment -name VHDL_FILE ../Components/Adder_32b/Adder_32b.vhd
 set_global_assignment -name VHDL_FILE Controller/Controller.vhd
 set_global_assignment -name VHDL_FILE Datapath/Datapath.vhd
 set_global_assignment -name VHDL_FILE riscV.vhd
-set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
-set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

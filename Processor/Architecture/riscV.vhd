@@ -5,7 +5,7 @@ USE ieee.numeric_std.ALL;
 -- The main entity in the project, which connects the Controller to the DataPath
 
 -- Wires systemInput and systemOutput represent interaction with the outside (system) 
--- They were used to provide input and to display output o our program
+-- They were used to provide input and to display output to our program
 -- More information about them can be found in DataMemory component
 
 ENTITY riscV IS
