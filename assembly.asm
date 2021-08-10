@@ -21,11 +21,12 @@ main:
   jal zero, end #jump incondicional
 
 primeFactors:
-  add s0, zero, a0
-  addi t0, zero, 2
+  add s0, zero, a0 #s0
+  addi t0, zero, 2 #t0 = 2
   while:
+    # n%2==0
     rem t1, s0, t0
-    bne t1, zero, doneWhile # n%2==0
+    bne t1, zero, doneWhile
 
     # cout << 2 << " ";
     lui t3, 0x00010010
@@ -35,13 +36,13 @@ primeFactors:
 
     jal zero, while #jump incondicional
   doneWhile:
-  addi s1, zero, 3
+  addi s1, zero, 3 # i = 3
   for:
     mul t1, s1, s1 # i^2
     blt s0, t1, doneFor # n < i^2
 
     whileInsideFor:
-      rem t1, s0, s1
+      rem t1, s0, s1 # n%i
       bne t1, zero, doneWhileInsideFor # n%i==0
 
       # cout << i << " ";
@@ -53,13 +54,14 @@ primeFactors:
       jal zero, whileInsideFor
 
     doneWhileInsideFor:
-    add s1, s1, t0
+    add s1, s1, t0 # n = n+2
     jal zero, for
   doneFor:
 
   if:
-    blt s0, t0, endPrimeFactors # n<2
+    blt s0, t0, endPrimeFactors # n < 2
     
+    # cout << n << " ";
     lui t3, 0x00010010
     sw, s0, 0x000000fc(t3)
 
